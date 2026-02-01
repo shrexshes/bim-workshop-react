@@ -5,3 +5,9 @@ Thank you,
 Ayush Shrestha
 
 ## DAY-1 : FUNDAMENTALS OF JAVASCRIPT
+
+
+
+## DAY-2 : 
+REQUIREMENTS: DOWNLOAD NODEJS
+- https://nodejs.org/en/download

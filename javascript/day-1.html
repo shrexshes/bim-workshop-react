@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Heading1</h1>
+    <h2>Heading2</h2>
+    <h3>Heading3</h3>
+    <h4>Heading4</h4>
+    <h5>Heading5</h5>
+    <h6>Heading6</h6>
+
+    <script>
+        console.log("Day 1 - Javascript class")
+
+        //variables 
+        /*
+        let - value can change later
+        const - value cannot change (most common in react)
+        var - old way
+        */
+
+        const name = "Ayush Shrestha"
+        let age = 23
+        const city = "Kathmandu"
+        console.log(name, age, city)
+        console.log(`my name is ${name}, my age is ${age}, i live in ${city}`)
+
+        // make another variable with favorite food in string , and isStudent in boolean
+        const favoriteFood = "Momo"
+        const isStudent = true
+        console.log(`My favorite food is ${favoriteFood}, and my student status is ${isStudent}`)
+
+        //--------------------Functions---------------------
+        /*
+            OLD WAY
+            function functionName(parms1, parms2) {
+                //block of code
+            }
+
+            NEW WAY
+            const functionName=(params1, parms2)=>{
+                // block of code
+            }
+        */
+
+        // example 
+        const greetMe = (name) => {
+            alert(`Hello ${name}, How are you ?`)
+        }
+
+        greetMe("Ayush")
+
+        const addTwoNumbers = (a, b) => {
+            alert(`Your sum is ${a + b}`)
+        }
+
+        addTwoNumbers(1, 1)
+
+        //Destructuring
+        const person={name:"Mia", age:20, city:"kathmandu"}
+        console.log(person.name)
+        console.log(person.city)
+
+        //spread operator
+        const fruits=['apple','oranges']
+        const moreFruits=[...fruits,'cherry']
+
+        console.log(moreFruits)
+
+        //map
+        const numbers=[1,2,3,4,5,6,7,8,9,10]
+
+        numbers.map((number,idx)=>{
+            console.log(`${idx} : ${number}`)
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>
