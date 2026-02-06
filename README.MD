@@ -16,6 +16,7 @@ Ayush Shrestha
 REQUIREMENTS: DOWNLOAD NODEJS
 - https://nodejs.org/en/download
 
+What we are studying on day 2
 - Promises
 - Async and Await
 - React
