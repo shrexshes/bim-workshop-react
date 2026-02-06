@@ -5,9 +5,22 @@ Thank you,
 Ayush Shrestha
 
 ## DAY-1 : FUNDAMENTALS OF JAVASCRIPT
-
+- Variables 
+- Functions
+- Destructuring
+- Spread operator
+- Map
 
 
 ## DAY-2 : 
 REQUIREMENTS: DOWNLOAD NODEJS
 - https://nodejs.org/en/download
+
+- Promises
+- Async and Await
+- React
+- React Installation
+- Tailwind Installation
+- Components
+- Jsx
+- Props
