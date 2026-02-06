@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Step 1 : fetch the data from external api
+        fetch('https://jsonplaceholder.typicode.com/todos/1')
+        //step 2 : After the data is fetch put it in a response and if response
+        //          is not ok throw error
+        .then((response) => {
+            if(){
+                throw new Error("Network response was not ok")
+            }
+        // Step 3: if th!response.oke data is okay : return the data
+            return response.json()
+        })
+        // Step 4: Capture the data and console.log it
+        .then((data)=>{
+            console.log(data)
+        })
+    </script>
+</body>
+
+</html>

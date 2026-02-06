@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+    /*
+
+    Promises : Promises is an object representing the eventual completion( or faliure) 
+                of an asynchronous operation and its resulting values
+
+    There are three states of Promises
+    1. Pending : The initial state. The operation hasnt finished yed
+    2. Fulfilled(Resolved) : The operation completed successfully, and you have a result
+    3. Rejected: The operation failed, usually returning an error message
+
+    The upgraded version of promises : Async and Await
+    */
+
+    //Creating a new promise
+    const myPromise=new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            const success=false
+
+            if(success){
+                resolve("The Task is Loaded")
+            }
+            else{
+                reject("The Task is rejected or failed")
+            }
+
+        },2000) //wait 2sec
+    })
+
+    myPromise.then(data=>{
+        console.log(`Success: ${data}`)
+    }).catch(error=>{
+        console.log(`Error occured: ${error}`)
+    }).finally(()=>{
+        console.log("Finally the process is finished")
+    })
+
+    </script>
+</body>
+
+</html>
