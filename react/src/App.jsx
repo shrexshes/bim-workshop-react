@@ -4,6 +4,8 @@ import Buttons from './components/Buttons'
 import Navbar from './components/Navbar'
 import JsxExample from './components/JsxExample'
 import Props from './components/Props'
+import UseStateExample from './components/UseStateExample'
+import { Counter } from './components/UseRef'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,6 +19,8 @@ function App() {
     <JsxExample/>
     <Buttons title="Primary Button"/>
     <Buttons title="Secondary Button"/>
+    <UseStateExample/>
+    <Counter/>  
     </>
   )
 }

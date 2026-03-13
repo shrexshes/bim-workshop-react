@@ -19,9 +19,22 @@ REQUIREMENTS: DOWNLOAD NODEJS
 What we are studying on day 2
 - Promises
 - Async and Await
+
+HOME WORK
+diffrence between asynchronous function and synchronous function
+
+## Day-3
 - React
 - React Installation
-- Tailwind Installation
-- Components
-- Jsx
 - Props
+- Components
+- Button plus resuable components
+
+## Day-4 
+- useState
+- useEffect
+- useRef
+- Ternary Operators
+
+## Day-5 
+- Projects
