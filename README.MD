@@ -36,5 +36,9 @@ diffrence between asynchronous function and synchronous function
 - useRef
 - Ternary Operators
 
+Homework:
+1. ContextAPI 
+2. PROPS DRILLING
+
 ## Day-5 
 - Projects

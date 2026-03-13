@@ -6,21 +6,27 @@ import JsxExample from './components/JsxExample'
 import Props from './components/Props'
 import UseStateExample from './components/UseStateExample'
 import { Counter } from './components/UseRef'
+import TernaryOperator from './components/TernaryOperator'
+import ShortCircuitEvaluation from './components/ShortCircuitEvaluation'
+import UseEffectExample from './components/useEffectExample'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <Navbar/>
+    {/* <Navbar/>
     <Props name="Ayush"/> 
     <Props name="Joshna"/> 
     <Props name="Smile"/> 
     <JsxExample/>
     <Buttons title="Primary Button"/>
     <Buttons title="Secondary Button"/>
-    <UseStateExample/>
-    <Counter/>  
+    <UseStateExample/> */}
+    {/* <Counter/>   */}
+    {/* <TernaryOperator/>
+    <ShortCircuitEvaluation/> */}
+    <UseEffectExample/>
     </>
   )
 }
