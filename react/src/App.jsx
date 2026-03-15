@@ -9,6 +9,7 @@ import { Counter } from './components/UseRef'
 import TernaryOperator from './components/TernaryOperator'
 import ShortCircuitEvaluation from './components/ShortCircuitEvaluation'
 import UseEffectExample from './components/useEffectExample'
+import UseContextApi from './components/UseContextApi'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,7 +27,8 @@ function App() {
     {/* <Counter/>   */}
     {/* <TernaryOperator/>
     <ShortCircuitEvaluation/> */}
-    <UseEffectExample/>
+    {/* <UseEffectExample/> */}
+    <UseContextApi/>
     </>
   )
 }
