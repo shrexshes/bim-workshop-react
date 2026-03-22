@@ -1,26 +1,31 @@
 import { useState } from 'react'
 import './App.css'
+import ApiSetupKey from './components/ApiSetupKey'
+import Header from './components/Header'
 
 function App() {
+  const [apiKeyInput,setApiKeyInput]=useState("")
+  const [apiKey,setApiKey]=useState("")
   const [showApiSetup,setShowApiSetup]=useState(true)
+  
+  // for ApiSetupKey
+  const handleApiKeySubmit=(e)=>{
+    e.preventDefault(); //this stops the tab from reloading
+    if(apiKeyInput.trim()){ // if there is api key then trim()
+      setApiKey(apiKeyInput.trim()) // now if there is api key then store them in setApiKey 
+      setShowApiSetup(false)
+    }
+  }
 
   if(showApiSetup){
     return(
-     <div className='min-h-screen bg-neutral-900'>
-      <div className='max-w-3xl py-30 mx-auto z-10'>
-        <div className='bg-white p-10 flex items-center flex-col border-2 border-neutral-300 rounded-3xl space-y-3'>
-          <h1 className='inter text-3xl font-bold'>Mood Bite</h1>
-          <p className='inter text-lg'>Get your delicious food recipe according to your mood.</p>
-
-        </div>
-      </div>
-     </div>
+     <ApiSetupKey onSubmit={handleApiKeySubmit} setApiKeyInput={setApiKeyInput} apiKeyInput={apiKeyInput}/>
     )
   }
 
   return (
     <>
-      <h1 className='text-4xl'>Mood Bite</h1>
+      <Header onChangeApiKey={()=>{setShowApiSetup(true); setApiKeyInput("");}}/>
     </>
   )
 }
