@@ -20,9 +20,78 @@ function App() {
   const [apiKeyInput, setApiKeyInput] = useState("")
   const [apiKey, setApiKey] = useState("")
   const [showApiSetup, setShowApiSetup] = useState(true)
-  const [selectedMood,setSelectedMood]=useState(null)
-  const [customMood, setCustomMood]=useState("")
-  const [loading,setLoading]=useState(false)
+  const [selectedMood, setSelectedMood] = useState(null)
+  const [customMood, setCustomMood] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [recipes,setRecipes]=useState([])
+  const [activeRecipe,setActiveRecipe]=useState(null)
+
+  // save to localstorage
+  useEffect(() => { if (apiKey) localStorage.setItem("apiKey", apiKey) }, [apiKey])
+  console.log(apiKey)
+
+  // 
+  //
+
+  const fetchRecipes=async(moodLabel)=>{
+    setLoading(true)
+    setError("")
+    setRecipes([])
+    setActiveRecipe(null)
+
+    const prompt=`You are a creative culinary expert. Based on someone feeling ${moodLabel}. right now suggest 2 recipe ideas that match their mood.
+    
+    For each recipe, return a JSON object with :
+    - name:string(creative recipe name with nepali background)
+    - emoji: string(1-2 fitting emoji)
+    - description:string (1-2 sentences about why this recipe fits the mood)
+    - defficulty: string("Easy","Medium","Hard")
+    - cookTime:string(eg:20mins)
+    - servings: number
+    - ingredients:array of strings(6-8 main ingredients to make the dish)
+    - steps:array of strings(5-7 clear cooking steps)
+    - moodBoost:string (1 sentence on how this food helps the mood)
+
+    Return only a valid JSON array of 2 recipes, no markdown, no extra text
+    `
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json", 'X-goog-api-key':apiKey},
+        body:JSON.stringfy({
+          contents:[{parts:[{text:prompt}] }],
+          generationConfig:{temperature:0.9,maxOutputTokens:8192}
+        })
+      })
+      
+      //if error ayo bhane
+      if(!response.ok){
+        const err=await response.json()
+        throw new Error(err.error?.message || "API Request Failed")
+      }
+
+      //if success bhayo bhane
+      const data=await response.json()
+      const text= data.cantidates?.[0]?.content?.parts?.[0]?.text;
+
+      // if the text is null
+      if(!text) throw new Error("No response from Gemini")
+
+      //cleaning the response from gemini
+      const cleaned=text.replace(/```json\n?/g,"").replace(/```\n?/g,"").trim()
+
+      const parsed=JSON.parse(cleaned);
+      setRecipes(parsed)
+      setActiveRecipe(parsed[0])
+    } catch (error) {
+      setError(err.message || "Something went wrong. Check your api key")
+    }
+    finally{
+      setLoading(false)
+    }
+  }
 
   // for ApiSetupKey
   const handleApiKeySubmit = (e) => {
@@ -33,7 +102,7 @@ function App() {
     }
   }
 
-  const handleMoodSelect=(mood)=>{
+  const handleMoodSelect = (mood) => {
     // this function is used to select the mood from the MOOD json data and if there is anything 
     // typed in cuustom mood then it make it empty
     setSelectedMood(mood)
@@ -41,11 +110,11 @@ function App() {
     //fetchRecipe -> TODO -> To fetch recipes from gemini
   }
 
-  const handleCustomMoodSubmit=(e)=>{
+  const handleCustomMoodSubmit = (e) => {
     //this function is used to select the custom mood
     e.preventDefault()
-    if(customMood.trim()){
-      setSelectedMood({id:"custom",emoji:"custom",label:customMood.trim(),color:"from-violet-400 to-purple-500",bg:"bg-violet-50",border:"border-violet-300"})
+    if (customMood.trim()) {
+      setSelectedMood({ id: "custom", emoji: "custom", label: customMood.trim(), color: "from-violet-400 to-purple-500", bg: "bg-violet-50", border: "border-violet-300" })
 
       // fetchRecipies -> TODO -> To fetch recipes from gemini for custom mood
 
@@ -64,13 +133,13 @@ function App() {
       <main className='max-w-6xl mx-auto px-4 py-10'>
         <HeroText />
         <MoodSelector
-        moods={MOODS}
-        selectedMood={selectedMood}
-        customMood={customMood}
-        setCustomMood={setCustomMood}
-        onMoodSelect={handleMoodSelect}
-        onCustomSubmit={handleCustomMoodSubmit}
-        loading={loading}
+          moods={MOODS}
+          selectedMood={selectedMood}
+          customMood={customMood}
+          setCustomMood={setCustomMood}
+          onMoodSelect={handleMoodSelect}
+          onCustomSubmit={handleCustomMoodSubmit}
+          loading={loading}
         />
       </main>
     </div>
