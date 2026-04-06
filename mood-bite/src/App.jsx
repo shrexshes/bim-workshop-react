@@ -24,24 +24,36 @@ function App() {
   const [customMood, setCustomMood] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [recipes,setRecipes]=useState([])
-  const [activeRecipe,setActiveRecipe]=useState(null)
+  const [recipes, setRecipes] = useState([])
+  const [activeRecipe, setActiveRecipe] = useState(null)
+
+
+  useEffect(() => {
+    // if the api is already stored then dont pop up the ApiSetupKey, and get the key from localstorage and put it in state
+    const storedApiKey = localStorage.getItem("apiKey")
+
+    if (storedApiKey) {
+      setApiKey(storedApiKey)
+      setApiKeyInput(storedApiKey)
+      setShowApiSetup(false)
+    }
+  }, [])
 
   // save to localstorage
   useEffect(() => { if (apiKey) localStorage.setItem("apiKey", apiKey) }, [apiKey])
   console.log(apiKey)
 
+
   // 
   //
 
-  const fetchRecipes=async(moodLabel)=>{
+  const fetchRecipes = async (moodLabel) => {
     setLoading(true)
     setError("")
     setRecipes([])
     setActiveRecipe(null)
 
-    const prompt=`You are a creative culinary expert. Based on someone feeling ${moodLabel}. right now suggest 2 recipe ideas that match their mood.
-    
+    const prompt = `You are a creative culinary expert. Based on someone feeling ${moodLabel}. right now suggest 2 recipe ideas that match their mood.
     For each recipe, return a JSON object with :
     - name:string(creative recipe name with nepali background)
     - emoji: string(1-2 fitting emoji)
@@ -55,40 +67,41 @@ function App() {
 
     Return only a valid JSON array of 2 recipes, no markdown, no extra text
     `
-
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`,{
-        method:"POST",
-        headers:{"Content-Type":"application/json", 'X-goog-api-key':apiKey},
-        body:JSON.stringfy({
-          contents:[{parts:[{text:prompt}] }],
-          generationConfig:{temperature:0.9,maxOutputTokens:8192}
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'X-goog-api-key': apiKey },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.9, maxOutputTokens: 8192 }
         })
       })
-      
       //if error ayo bhane
-      if(!response.ok){
-        const err=await response.json()
+      if (!response.ok) {
+        const err = await response.json()
+        console.log(err)
         throw new Error(err.error?.message || "API Request Failed")
       }
 
       //if success bhayo bhane
-      const data=await response.json()
-      const text= data.cantidates?.[0]?.content?.parts?.[0]?.text;
+      const data = await response.json()
+      const text = data.candidates[0]?.content?.parts[0]?.text;
+      console.log(text)
+
 
       // if the text is null
-      if(!text) throw new Error("No response from Gemini")
+      if (!text) throw new Error("No response from Gemini")
 
       //cleaning the response from gemini
-      const cleaned=text.replace(/```json\n?/g,"").replace(/```\n?/g,"").trim()
+      const cleaned = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim()
 
-      const parsed=JSON.parse(cleaned);
+      const parsed = JSON.parse(cleaned);
       setRecipes(parsed)
       setActiveRecipe(parsed[0])
     } catch (error) {
-      setError(err.message || "Something went wrong. Check your api key")
+      setError(error.message || "Something went wrong. Check your api key")
     }
-    finally{
+    finally {
       setLoading(false)
     }
   }
@@ -107,7 +120,8 @@ function App() {
     // typed in cuustom mood then it make it empty
     setSelectedMood(mood)
     setCustomMood("")
-    //fetchRecipe -> TODO -> To fetch recipes from gemini
+    console.log(mood.label)
+    fetchRecipes(mood.label)
   }
 
   const handleCustomMoodSubmit = (e) => {
@@ -115,9 +129,7 @@ function App() {
     e.preventDefault()
     if (customMood.trim()) {
       setSelectedMood({ id: "custom", emoji: "custom", label: customMood.trim(), color: "from-violet-400 to-purple-500", bg: "bg-violet-50", border: "border-violet-300" })
-
-      // fetchRecipies -> TODO -> To fetch recipes from gemini for custom mood
-
+      fetchRecipes(customMood.trim())
     }
   }
 
@@ -141,6 +153,48 @@ function App() {
           onCustomSubmit={handleCustomMoodSubmit}
           loading={loading}
         />
+
+        {/* for loading  */}
+        {loading && <h2 className='text-2xl text-white inter'>Loading Recipies according to your mood</h2>}
+
+        {/* if recipes fetch garda error ayo bhanne */}
+        {error && (
+          <div className='bg-red-100/10 mt-8 border border-red-500/30 rounded-3xl p-6 text-center font-medium inter'>{error}</div>
+        )}
+
+        {recipes.map((recipe, index) => (
+          <div className='bg-neutral-500 p-6 mt-10 rounded-xl'>
+            <h2 className='text-2xl text-white inter font-bold'>{recipe?.emoji}{recipe?.name}</h2>
+            <p className='text-sm inter font-white border-t border-t-white mt-6 py-6 text-white '>{recipe?.description}</p>
+            <div className='bg-white rounded-full px-6 py-2 w-fit inter'>
+              {recipe?.cookTime}
+            </div>
+            <div className='bg-neutral-200 mt-5 rounded-full px-6 py-2 w-fit inter'>
+              {recipe?.defficulty}
+            </div>
+            <p className='text-sm inter font-white border-t border-t-white mt-6 py-6 text-white '>{recipe?.servings}</p>
+
+            <h2 className='text-2xl text-white inter font-bold mt-10'>Ingredients</h2>
+            {recipe.ingredients.map((ingredient, index) => (
+              <>
+                <ul className='text-white inter'>
+                  <li>{index + 1}.  {ingredient}</li>
+                </ul>
+              </>
+            ))}
+
+            <h2 className='text-2xl text-white inter font-bold mt-10'>Steps</h2>
+
+            {recipe.steps.map((step, index) => (
+              <>
+                <ul className='text-white inter'>
+                  <li>{index + 1}.  {step}</li>
+                </ul>
+              </>
+            ))}
+          </div>
+        ))}
+
       </main>
     </div>
   )
